@@ -92,7 +92,7 @@ def score(
 
       fit-score score --resume samples/resume.md --jd samples/jd-weak-fit.md
 
-      cat samples/jd-weak-fit.md | fit-score score --resume samples/resume.md --json
+      cat samples/jd-weak-fit.md | fit-score score --resume samples/resume.md
     """
     load_dotenv()
     try:

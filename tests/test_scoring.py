@@ -1,5 +1,7 @@
 """Score arithmetic and evidence rules. No model calls except scripted fakes."""
 
+import json
+
 import pytest
 
 from fit_score.errors import ScoringError
@@ -174,6 +176,18 @@ def test_fenced_and_preamble_json() -> None:
         judgment="Here you go:\n" + JUDGMENT_JSON + "\nDone.",
     )
     report = score_fit("resume body", "job body", default_rubric(), fenced)
+    assert report.overall_score == EXPECTED_SCORE
+
+
+def test_nested_model_payload_is_accepted() -> None:
+    extraction = json.dumps({"response": json.loads(EXTRACTION_JSON)})
+    judgment = json.dumps({"result": json.loads(JUDGMENT_JSON)})
+    report = score_fit(
+        "resume body",
+        "job body",
+        default_rubric(),
+        ScriptedClient(extraction, judgment),
+    )
     assert report.overall_score == EXPECTED_SCORE
 
 

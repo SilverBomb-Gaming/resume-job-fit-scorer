@@ -177,7 +177,7 @@ def ground_requirements(
 
 
 def _parse_extraction(raw: str, rubric: Rubric) -> list[RequirementAssessment]:
-    data = extract_json_object(raw)
+    data = _coerce_payload(extract_json_object(raw), "requirements")
     parsed = ExtractionResult.model_validate(data)
     grounded = ground_requirements(parsed, rubric)
     if not grounded:
@@ -189,7 +189,7 @@ def _parse_extraction(raw: str, rubric: Rubric) -> list[RequirementAssessment]:
 
 
 def _parse_judgment(raw: str) -> JudgmentResult:
-    data = extract_json_object(raw)
+    data = _coerce_payload(extract_json_object(raw), "judgments")
     parsed = JudgmentResult.model_validate(data)
     rewrites = [item for item in parsed.rewrites if item.suggested_bullet and item.grounded_in]
     why = [item for item in parsed.why if item]
@@ -230,6 +230,19 @@ def _complete_json(
     raise ScoringError(
         f"The model returned an unusable {task} after a retry. Last error: {last_error}"
     ) from last_error
+
+
+def _coerce_payload(data: dict[str, object], key: str) -> dict[str, object]:
+    """Accept `{key: ...}` or a single nested object that holds `key`.
+
+    Small local models sometimes wrap the schema in `response` or `result`.
+    """
+    if key in data:
+        return data
+    nested = [value for value in data.values() if isinstance(value, dict) and key in value]
+    if len(nested) == 1:
+        return nested[0]
+    return data
 
 
 def extract_json_object(raw: str) -> dict[str, object]:
