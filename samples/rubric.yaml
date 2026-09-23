@@ -1,0 +1,22 @@
+name: default
+description: Extract concrete job-description requirements into categories, then compare each one to the resume.
+categories:
+  - id: requirements
+    label: Requirements
+    description: Explicit responsibilities and qualifications the job description states as requirements.
+  - id: skills
+    label: Skills
+    description: Domain skills, methods, and competencies named in the job description.
+  - id: years
+    label: Years of experience
+    description: Years of experience, seniority, and how long the candidate should have practiced a skill.
+  - id: tools
+    label: Tools
+    description: Named tools, languages, protocols, platforms, and systems.
+weights:
+  must: 0.75
+  nice: 0.25
+status_weights:
+  matched: 1.0
+  partial: 0.5
+  missing: 0.0
