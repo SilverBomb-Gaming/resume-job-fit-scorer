@@ -1,4 +1,4 @@
-# Resume Job Fit Scorer
+# Resume Job Fit Scorer by Alfredo Cardona (SilverBomb-Gaming)
 
 A local-first CLI that scores how well a **resume** matches a **job description**, then shows the matches, the gaps, and a short explanation.
 
